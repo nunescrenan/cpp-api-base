@@ -1,0 +1,7 @@
+{
+    "name": "vendbunny-backend",
+    "version": "0.1.0",
+    "dependencies": [
+      "drogon"
+    ]
+  }  
