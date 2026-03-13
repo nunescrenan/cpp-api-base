@@ -6,15 +6,23 @@ Backend em C++ usando [Drogon](https://github.com/drogonframework/drogon), com b
 
 - CMake 3.20+
 - compilador com suporte a C++20
-- `vcpkg`
+- `vcpkg` com checkout completo do repositorio e `VCPKG_ROOT` configurado, ou `drogon` instalado no Homebrew
 - Ninja ou outro generator configurado no ambiente
 
 ## Rodando o projeto
 
 ```bash
-cmake -S . -B build
+./setup.sh
 cmake --build build
 ./build/vendbunny_backend
+```
+
+Se quiser usar outro diretorio de build:
+
+```bash
+./setup.sh Build
+cmake --build Build
+./Build/vendbunny_backend
 ```
 
 Para modo watch:
@@ -83,3 +91,6 @@ src/
 
 - CORS esta habilitado quando `corsEnabled` for `true`.
 - O path de upload do Drogon foi apontado para o diretorio temporario do sistema, entao o projeto nao cria mais a pasta local `uploads/`.
+- `setup.sh` limpa automaticamente um cache de CMake que tenha sido gerado a partir de outro path do projeto.
+- O script tenta usar `drogon` via Homebrew primeiro. Se nao encontrar, usa o toolchain do `vcpkg`.
+- A formula `brew install vcpkg` so instala o binario; para manifest mode, use um checkout completo do `vcpkg` e defina `VCPKG_ROOT`.
