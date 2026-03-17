@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <sstream>
 #include <string_view>
+#include <thread>
 #include <unistd.h>
 #include <ctime>
 #include "config/Config.hpp"
@@ -23,16 +24,6 @@ namespace {
     constexpr std::string_view kAnsiWarn = "\033[38;5;220m";
     constexpr std::string_view kAnsiError = "\033[38;5;203m";
     constexpr std::string_view kAnsiFatal = "\033[1;37;41m";
-
-    trantor::Logger::LogLevel parseLogLevel(const std::string& level) {
-        if (level == "trace") return trantor::Logger::kTrace;
-        if (level == "debug") return trantor::Logger::kDebug;
-        if (level == "info") return trantor::Logger::kInfo;
-        if (level == "warn") return trantor::Logger::kWarn;
-        if (level == "error") return trantor::Logger::kError;
-        if (level == "fatal") return trantor::Logger::kFatal;
-        return trantor::Logger::kInfo;
-    }
 
     bool isTimeToken(const std::string_view token) {
         return token.size() >= 8 &&
@@ -252,9 +243,9 @@ int main() {
     registerAllRoutes();
 
     auto& app = drogon::app();
-    app.addListener(config.host, config.port)
-       .setThreadNum(config.threads)
-       .setLogLevel(parseLogLevel(config.logLevel));
+    app.addListener("0.0.0.0", config.port)
+       .setThreadNum(std::thread::hardware_concurrency())
+       .setLogLevel(trantor::Logger::kInfo);
     configureUploadPath(app);
     configureRequestLogging(app);
 
@@ -262,7 +253,7 @@ int main() {
         configureCors(app);
     }
 
-    LOG_INFO << "Server starting on " << config.host << ":" << config.port;
+    LOG_INFO << "Server starting on port " << config.port;
     app.run();
 
     LOG_INFO << "Server stopped";
