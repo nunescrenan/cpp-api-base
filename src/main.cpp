@@ -13,6 +13,8 @@
 #include <ctime>
 #include "config/Config.hpp"
 #include "controllers/Routes.hpp"
+#include "middlewares/OAuthMiddleware.hpp"
+#include "utils/EnvLoader.hpp"
 
 namespace {
     constexpr std::string_view kAnsiReset = "\033[0m";
@@ -228,6 +230,8 @@ namespace {
 }
 
 int main() {
+    loadEnv();
+
     auto config = Config::load();
     configureLogger();
 
@@ -252,6 +256,8 @@ int main() {
     if (config.corsEnabled) {
         configureCors(app);
     }
+
+    setupOAuth(app);
 
     LOG_INFO << "Server starting on port " << config.port;
     app.run();
