@@ -2,6 +2,9 @@
     "name": "cpp-api-base",
     "version": "0.1.0",
     "dependencies": [
-      "drogon"
+      {
+        "name": "drogon",
+        "features": ["mysql"]
+      }
     ]
-  }  
+}
