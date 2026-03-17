@@ -1,4 +1,4 @@
-.PHONY: start setup build clean deps db
+.PHONY: start setup build clean deps db client
 
 VCPKG_ROOT := $(or $(VCPKG_ROOT),$(HOME)/vcpkg)
 CMAKE_ARGS := -DCMAKE_TOOLCHAIN_FILE=$(VCPKG_ROOT)/scripts/buildsystems/vcpkg.cmake -G Ninja
@@ -21,7 +21,10 @@ clean:
 db:
 	@./scripts/db.sh $(filter-out db,$(MAKECMDGOALS))
 
-create migrate seed fresh status:
+client:
+	@./scripts/client.sh $(filter-out client,$(MAKECMDGOALS))
+
+create migrate seed fresh status list remove disable enable:
 	@:
 
 %:
